@@ -1,8 +1,8 @@
 package errorlist
 
 import (
-  "errors"
-  "fmt"
+	"errors"
+	"fmt"
 )
 
 //==================================================================//
@@ -16,31 +16,29 @@ type Errorlist struct {
 // -------------------------------------------------------------- //
 // Add
 // ---------------------------------------------------------------//
-func (el *Errorlist) Add(err error) error {
+func (el *Errorlist) Add(err error) {
   if err != nil {
     el.this = append(el.this, err)
     if el.failFast {
-      return el.Unwrap()
+      panic(err)
     }
   }
-  return nil
 }
 
 //----------------------------------------------------------------//
 // Addf
 //----------------------------------------------------------------//
-func (el *Errorlist) Addf(format string, args ...interface{}) error {
-  return el.Add(fmt.Errorf(format, args...))
+func (el *Errorlist) Addf(format string, args ...interface{}) {
+  el.Add(fmt.Errorf(format, args...))
 }
 
 // -------------------------------------------------------------- //
 // AddMiss
 // ---------------------------------------------------------------//
-func (el *Errorlist) AddMiss(ok bool, format string, args ...interface{}) error {
+func (el *Errorlist) AddMiss(ok bool, format string, args ...interface{}) {
   if !ok {
-    return el.Add(fmt.Errorf(format, args...))
+    el.Add(fmt.Errorf(format, args...))
   }
-  return nil
 }
 
 // -------------------------------------------------------------- //
@@ -72,9 +70,9 @@ func (el *Errorlist) Error() string {
 // -------------------------------------------------------------- //
 // HasOnly
 // ---------------------------------------------------------------//
-func (el *Errorlist) HasOnly(ekind error) bool {
+func (el *Errorlist) HasOnly(errKind error) bool {
   for _, err := range el.this {
-    if !errors.Is(err, ekind) {
+    if !errors.Is(err, errKind) {
       return false
     }
   }

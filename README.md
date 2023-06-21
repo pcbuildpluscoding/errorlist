@@ -1,2 +1,2 @@
 # Errorlist
-Errorlist wraps a error slice which is useful for converting consecutive err tests into more readable code which can be error tested at the end of the block
+Errorlist wraps a error slice which is useful for converting consecutive err tests into more readable code. At the end of the section, the group error status is available. This is useful for handling type errors, when retrieving consecutive values from a provider object. When failfast mode is applied and an error is added, panic(err) is called. In this case use a panic handler to catch the exception.
